@@ -12,9 +12,11 @@ import {
 } from "@/shared/ui/dialog";
 import { Input } from "@/shared/ui/input";
 import { Label } from "@/shared/ui/label";
+import { useT } from "@/shared/i18n";
 import { fieldClass, labelClass, primaryButtonClass } from "./field-styles";
 
 export function RegisterDialog() {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,12 +24,12 @@ export function RegisterDialog() {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     if (data.get("password") !== data.get("confirmPassword")) {
-      setError("Las contraseñas no coinciden");
+      setError(t.auth.passwordMismatch);
       return;
     }
     setError(null);
     // TODO: conectar con el backend cuando exista
-    toast.success("Cuenta creada");
+    toast.success(t.auth.accountCreated);
     setOpen(false);
   }
 
@@ -38,23 +40,23 @@ export function RegisterDialog() {
           <button type="button" className="text-vet-link underline" />
         }
       >
-        Regístrate
+        {t.auth.signUp}
       </DialogTrigger>
       <DialogContent className="max-w-[535px] gap-0 rounded-2xl bg-white px-[44px] py-[40px] ring-0 shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:max-w-[535px]">
         <DialogHeader className="items-center">
           <DialogTitle className="font-arvo text-[48px] font-normal leading-tight text-black">
-            Crear cuenta
+            {t.auth.registerTitle}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="mt-8 grid gap-[18px]">
           <div className="grid gap-1.5">
             <Label htmlFor="fullName" className={labelClass}>
-              Nombre Completo
+              {t.auth.fullName}
             </Label>
             <Input
               id="fullName"
               name="fullName"
-              placeholder="Ej. Ian Guillermo"
+              placeholder={t.auth.fullNamePlaceholder}
               autoComplete="name"
               required
               className={fieldClass}
@@ -62,13 +64,13 @@ export function RegisterDialog() {
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="reg-email" className={labelClass}>
-              Correo Electronico
+              {t.common.email}
             </Label>
             <Input
               id="reg-email"
               name="email"
               type="email"
-              placeholder="Ej. ian@gmail.com"
+              placeholder={t.auth.emailPlaceholder}
               autoComplete="email"
               required
               className={fieldClass}
@@ -76,13 +78,13 @@ export function RegisterDialog() {
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="reg-password" className={labelClass}>
-              Contraseña
+              {t.common.password}
             </Label>
             <Input
               id="reg-password"
               name="password"
               type="password"
-              placeholder="Ej. IanKwaiWuu123"
+              placeholder={t.auth.newPasswordPlaceholder}
               autoComplete="new-password"
               minLength={8}
               required
@@ -91,13 +93,13 @@ export function RegisterDialog() {
           </div>
           <div className="grid gap-1.5">
             <Label htmlFor="confirmPassword" className={labelClass}>
-              Confirmar Contraseña
+              {t.auth.confirmPassword}
             </Label>
             <Input
               id="confirmPassword"
               name="confirmPassword"
               type="password"
-              placeholder="Ej. IanKwaiWuu123"
+              placeholder={t.auth.newPasswordPlaceholder}
               autoComplete="new-password"
               required
               className={fieldClass}
@@ -109,7 +111,7 @@ export function RegisterDialog() {
             )}
           </div>
           <Button type="submit" className={`${primaryButtonClass} mx-auto mt-2`}>
-            Registrarse
+            {t.auth.register}
           </Button>
         </form>
       </DialogContent>

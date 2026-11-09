@@ -49,10 +49,10 @@ export const en: Dictionary = {
     clientDetail: "Client profile",
   },
   appointments: {
+    pet: "Pet",
     species: "Animal species",
     dog: "Dog",
     cat: "Cat",
-    otherSpecies: "Other",
     sex: "Sex",
     male: "Male",
     female: "Female",

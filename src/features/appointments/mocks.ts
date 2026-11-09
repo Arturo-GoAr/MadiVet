@@ -9,6 +9,12 @@ export type Appointment = {
   subject: string;
 };
 
+// Mascotas del cliente en sesión. TODO: vendrán de la API (mismos ids que features/pets/mocks.ts).
+export const MY_PETS = [
+  { id: "1", name: "Firulais" },
+  { id: "2", name: "Luna" },
+];
+
 export const APPOINTMENTS: Appointment[] = [
   { id: "1", type: "grooming", pet: "Firulais", date: "2026-11-01", subject: "Baño y corte" },
   { id: "2", type: "medical", pet: "Firulais", date: "2026-11-05", subject: "Revisión general" },

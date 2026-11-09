@@ -47,10 +47,10 @@ export const es = {
     clientDetail: "Ficha de cliente",
   },
   appointments: {
+    pet: "Mascota",
     species: "Especie de animal",
     dog: "Perro",
     cat: "Gato",
-    otherSpecies: "Otro",
     sex: "Sexo",
     male: "Macho",
     female: "Hembra",

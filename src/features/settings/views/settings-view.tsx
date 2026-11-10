@@ -1,9 +1,10 @@
 "use client";
 
 import { LocaleSwitcher, useT } from "@/shared/i18n";
-import type { Role } from "@/shared/session";
+import { useSession } from "@/shared/session";
 
-export function SettingsView({ name, role }: { name: string; role: Role }) {
+export function SettingsView() {
+  const { name, role } = useSession();
   const t = useT();
   const rows = [
     [t.settings.name, name],

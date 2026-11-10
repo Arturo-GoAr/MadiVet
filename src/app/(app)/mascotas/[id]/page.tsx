@@ -1,6 +1,9 @@
 import { Suspense } from "react";
-import { PetDetailView } from "@/features/pets";
+import { PetDetailView, PETS } from "@/features/pets";
 import { Skeleton } from "@/shared/ui/skeleton";
+
+// Export estático: solo se generan las rutas de los mocks.
+export const generateStaticParams = () => PETS.map(({ id }) => ({ id }));
 
 async function Detail({ params }: { params: Promise<{ id: string }> }) {
   return <PetDetailView id={(await params).id} />;

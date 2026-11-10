@@ -6,7 +6,7 @@ import { APPOINTMENTS } from "@/features/appointments/mocks";
 import { useT } from "@/shared/i18n";
 import { Button } from "@/shared/ui/button";
 import { useOpenModal } from "@/shared/modal";
-import type { Role } from "@/shared/session";
+import { useSession, type Role } from "@/shared/session";
 import { AppointmentsChart } from "../components/appointments-chart";
 import { VaccineCard } from "../components/vaccine-card";
 
@@ -31,7 +31,8 @@ const ACTIONS = ["newAppointment", "adoptionRequest", "newGrooming"] as const;
 
 const card = "rounded-xl bg-white p-5 shadow-sm";
 
-export function DashboardView({ role }: { role: Role }) {
+export function DashboardView() {
+  const { role } = useSession();
   const t = useT();
   const openModal = useOpenModal();
   const today = format(new Date(), "yyyy-MM-dd");

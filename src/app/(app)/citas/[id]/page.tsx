@@ -1,7 +1,10 @@
 import { Suspense } from "react";
-import { AppointmentDetailView } from "@/features/appointments";
+import { AppointmentDetailView, APPOINTMENTS } from "@/features/appointments";
 import { ChatPanel } from "@/features/chat";
 import { Skeleton } from "@/shared/ui/skeleton";
+
+// Export estático: solo se generan las rutas de los mocks.
+export const generateStaticParams = () => APPOINTMENTS.map(({ id }) => ({ id }));
 
 async function Detail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

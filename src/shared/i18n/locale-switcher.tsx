@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/shared/ui/button";
-import { setLocale } from "./actions";
 import { locales } from "./config";
-import { useLocale, useT } from "./provider";
+import { useLocale, useSetLocale, useT } from "./provider";
 
 export function LocaleSwitcher() {
   const locale = useLocale();
+  const setLocale = useSetLocale();
   const t = useT();
 
   return (

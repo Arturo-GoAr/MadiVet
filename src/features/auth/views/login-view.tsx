@@ -11,12 +11,12 @@ export function LoginView() {
       <div className="relative hidden lg:block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/auth/circle.svg"
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/auth/circle.svg`}
           alt=""
           className="absolute -left-px -top-px h-[calc(100%+8px)] w-auto max-w-none"
         />
         <Image
-          src="/images/auth/logo.png"
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/images/auth/logo.png`}
           alt={t.auth.logoAlt}
           width={599}
           height={599}

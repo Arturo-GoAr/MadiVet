@@ -4,8 +4,7 @@ import { Arvo, Baloo_2, Geist, Geist_Mono } from "next/font/google";
 import "@/shared/styles/globals.css";
 import { TooltipProvider } from "@/shared/ui/tooltip";
 import { Toaster } from "@/shared/ui/sonner";
-import { I18nProvider } from "@/shared/i18n";
-import { getDictionary, getLocale } from "@/shared/i18n/server";
+import { defaultLocale, dictionaries, I18nProvider } from "@/shared/i18n";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,17 +28,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export async function generateMetadata(): Promise<Metadata> {
-  return { title: "VetMadi", description: (await getDictionary()).meta.description };
-}
-
-async function LocaleShell({ children }: { children: React.ReactNode }) {
-  return (
-    <I18nProvider locale={await getLocale()}>
-      <TooltipProvider>{children}</TooltipProvider>
-    </I18nProvider>
-  );
-}
+export const metadata: Metadata = {
+  title: "VetMadi",
+  description: dictionaries[defaultLocale].meta.description,
+};
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -48,10 +40,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} ${arvo.variable} ${baloo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-arvo">
-        <Suspense>
-          <LocaleShell>{children}</LocaleShell>
-        </Suspense>
-        <Toaster />
+        <I18nProvider>
+          <TooltipProvider>
+            <Suspense>{children}</Suspense>
+          </TooltipProvider>
+          <Toaster />
+        </I18nProvider>
       </body>
     </html>
   );

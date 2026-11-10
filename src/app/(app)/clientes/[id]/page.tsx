@@ -1,6 +1,9 @@
 import { Suspense } from "react";
-import { ClientDetailView } from "@/features/clients";
+import { ClientDetailView, CLIENTS } from "@/features/clients";
 import { Skeleton } from "@/shared/ui/skeleton";
+
+// Export estático: solo se generan las rutas de los mocks.
+export const generateStaticParams = () => CLIENTS.map(({ id }) => ({ id }));
 
 async function Detail({ params }: { params: Promise<{ id: string }> }) {
   return <ClientDetailView id={(await params).id} />;

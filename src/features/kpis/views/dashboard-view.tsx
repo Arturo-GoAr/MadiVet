@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { format } from "date-fns";
+import { APPOINTMENTS } from "@/features/appointments/mocks";
 import { useT } from "@/shared/i18n";
 import { Button } from "@/shared/ui/button";
 import { useOpenModal } from "@/shared/modal";
@@ -31,6 +34,11 @@ const card = "rounded-xl bg-white p-5 shadow-sm";
 export function DashboardView({ role }: { role: Role }) {
   const t = useT();
   const openModal = useOpenModal();
+  const today = format(new Date(), "yyyy-MM-dd");
+  // TODO: filtrar por el cliente en sesión cuando exista la API
+  const pending = APPOINTMENTS.filter((x) => x.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 5);
   return (
     <div className="grid gap-4">
       <nav aria-label={t.kpis.quickActions} className="flex flex-wrap justify-end gap-2">
@@ -41,7 +49,7 @@ export function DashboardView({ role }: { role: Role }) {
         ))}
       </nav>
       <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-      <div className="grid content-start gap-4">
+      <div className="grid grid-rows-[auto_1fr] gap-4">
         <div className="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))]">
           {STATS[role].map(({ n, key }) => (
             <div key={key} className={card}>
@@ -56,6 +64,21 @@ export function DashboardView({ role }: { role: Role }) {
       </div>
       <VaccineCard />
       </div>
+      <section className={card}>
+        <h2 className="mb-3 text-lg">{t.kpis.pendingAppointments}</h2>
+        <ul className="divide-y">
+          {pending.map((x) => (
+            <li key={x.id}>
+              <Link href={`/citas/${x.id}`} className="flex items-center justify-between gap-4 py-3 hover:bg-vet-surface">
+                <span>
+                  {t.appointments.types[x.type]} · {x.pet} · {x.subject}
+                </span>
+                <span className="text-sm text-vet-gray">{x.date}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }

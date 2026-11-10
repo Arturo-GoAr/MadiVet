@@ -19,6 +19,7 @@ export function AdoptionDetailsDialog({ pet, onClose }: { pet: AdoptablePet | nu
     [a.size, a.sizes[pet.size]],
     [a.vaccinated, yesNo(pet.vaccinated)],
     [a.sterilized, yesNo(pet.sterilized)],
+    [a.rescued, yesNo(pet.rescued)],
   ];
 
   return (

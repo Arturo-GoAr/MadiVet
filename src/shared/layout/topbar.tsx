@@ -14,11 +14,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/ui/dropdown-menu";
-import { screenFor, SOCIAL } from "./nav";
+import { screenFor } from "./nav";
 import { SearchBox } from "./search-box";
 
 // TODO: reemplazar por los assets del Figma en public/images/
-const Instagram = () => (
+export const Instagram = () => (
   <svg viewBox="0 0 24 24" className="size-8" aria-hidden>
     <defs>
       <linearGradient id="ig" x1="0" y1="1" x2="1" y2="0">
@@ -34,7 +34,7 @@ const Instagram = () => (
   </svg>
 );
 
-const Facebook = () => (
+export const Facebook = () => (
   <svg viewBox="0 0 24 24" className="size-8" aria-hidden>
     <circle cx="12" cy="12" r="12" fill="#0866ff" />
     <path fill="#fff" d="M13.3 24v-8.6h2.9l.5-3.4h-3.4V9.9c0-1 .4-1.7 1.8-1.7h1.7V5.1c-.3 0-1.4-.1-2.6-.1-2.6 0-4.3 1.6-4.3 4.4V12H7v3.4h2.9V24z" />
@@ -58,12 +58,6 @@ export function Topbar({ name }: { name: string }) {
           <SearchBox key={pathname} />
         </Suspense>
       </div>
-      <a href={SOCIAL.instagram} aria-label={t.shell.instagram} className="hidden sm:block">
-        <Instagram />
-      </a>
-      <a href={SOCIAL.facebook} aria-label={t.shell.facebook} className="hidden sm:block">
-        <Facebook />
-      </a>
       <DropdownMenu>
         <DropdownMenuTrigger aria-label={name} className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-vet-lilac">
           <Avatar size="lg">

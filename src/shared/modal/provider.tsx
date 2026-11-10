@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 
-export type ModalId = "newAppointment" | "newGrooming" | "adoptionRequest";
+export type ModalId = "newAppointment" | "newGrooming" | "adoptionRequest" | "appointmentDetails";
 export type ModalProps = { onClose: () => void; params?: Record<string, string> };
 
 type Registry = Record<ModalId, React.ComponentType<ModalProps>>;

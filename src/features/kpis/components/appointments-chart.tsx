@@ -14,27 +14,28 @@ const PET_NAMES = [...new Set(APPOINTMENTS.map((a) => a.pet))];
 // TODO: fecha de creación de la cuenta, vendrá de la sesión/API
 const ACCOUNT_CREATED = "2026-07-01";
 
-export function AppointmentsChart() {
+export function AppointmentsChart({ pet }: { pet?: string }) {
   const t = useT();
   const locale = locales[useLocale()];
+  const list = pet ? APPOINTMENTS.filter((a) => a.pet === pet) : APPOINTMENTS;
   const now = startOfMonth(new Date());
   // Hasta 6 meses, recortado a los que lleva la cuenta.
   const n = Math.min(MONTHS, differenceInCalendarMonths(now, parseISO(ACCOUNT_CREATED)) + 1);
   const data = Array.from({ length: n }, (_, k) => {
     const m = subMonths(now, n - 1 - k);
     const key = format(m, "yyyy-MM");
-    const inMonth = APPOINTMENTS.filter((a) => a.date.startsWith(key));
+    const inMonth = list.filter((a) => a.date.startsWith(key));
     return {
       month: format(m, "MMM", { locale }),
       count: inMonth.length,
-      pets: PET_NAMES.map((name) => ({ name, n: inMonth.filter((a) => a.pet === name).length })),
+      pets: (pet ? [pet] : PET_NAMES).map((name) => ({ name, n: inMonth.filter((a) => a.pet === name).length })),
     };
   });
 
   return (
-    <section className="rounded-xl bg-white p-5 shadow-sm">
+    <section className="flex flex-col rounded-xl bg-white p-5 shadow-sm">
       <h2 className="text-lg uppercase">{t.kpis.appointmentsByMonth}</h2>
-      <ChartContainer config={{ count: { label: t.kpis.appointmentsLabel, color: "var(--color-vet-lilac)" } }} className="mt-3 h-48 w-full">
+      <ChartContainer config={{ count: { label: t.kpis.appointmentsLabel, color: "var(--color-vet-lilac)" } }} className="mt-3 aspect-auto min-h-48 w-full flex-1">
         <LineChart data={data}>
           <CartesianGrid vertical={false} />
           <XAxis dataKey="month" tickLine={false} axisLine={false} className="capitalize" />

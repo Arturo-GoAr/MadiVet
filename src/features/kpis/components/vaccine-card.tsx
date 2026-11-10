@@ -8,24 +8,25 @@ import { cn } from "@/shared/lib/utils";
 import { useLocale, useT } from "@/shared/i18n";
 // TODO: una feature no importa de otra; mover mascotas a shared/ o a la API
 import { SCHEDULE } from "../schedule";
-import { PETS } from "@/features/pets/mocks";
+import { PETS, type Pet } from "@/features/pets/mocks";
 
 const locales = { es, en: enUS };
 const arrow = "rounded-full p-2 hover:bg-vet-surface disabled:opacity-30";
 
-export function VaccineCard() {
+// `fixed`: ficha de una sola mascota, sin selector.
+export function VaccineCard({ fixed }: { fixed?: Pet }) {
   const t = useT();
   const lang = useLocale();
   const locale = locales[lang];
   const [i, setI] = useState(0);
-  const pet = PETS[i];
+  const pet = fixed ?? PETS[i];
   const day = (d: string) => format(parseISO(d), "P", { locale });
 
   return (
     <section className="rounded-xl bg-white p-5 shadow-sm">
       <h2 className="text-2xl uppercase">{t.kpis.records}</h2>
       <div className="mt-3 flex items-center justify-between">
-        <button type="button" aria-label={t.kpis.prevPet} disabled={i === 0} onClick={() => setI(i - 1)} className={arrow}>
+        <button type="button" aria-label={t.kpis.prevPet} hidden={!!fixed} disabled={i === 0} onClick={() => setI(i - 1)} className={arrow}>
           <ChevronLeft className="size-5" />
         </button>
         <div className="text-center">
@@ -34,7 +35,7 @@ export function VaccineCard() {
             {t.appointments[pet.species]} · {t.appointments[pet.sex]} · {pet.ageYears} {t.pets.years}
           </p>
         </div>
-        <button type="button" aria-label={t.kpis.nextPet} disabled={i === PETS.length - 1} onClick={() => setI(i + 1)} className={arrow}>
+        <button type="button" aria-label={t.kpis.nextPet} hidden={!!fixed} disabled={i === PETS.length - 1} onClick={() => setI(i + 1)} className={arrow}>
           <ChevronRight className="size-5" />
         </button>
       </div>

@@ -7,6 +7,7 @@ export type Pet = {
   species: "dog" | "cat";
   sex: "male" | "female";
   ageYears: number;
+  photo?: string; // URL de la foto
   vaccines: Vaccine[];
   // Fecha de aplicación por `${grupo}-${dosis}` del esquema de features/kpis/schedule.ts. TODO: unificar con `vaccines` al llegar la API.
   applied: Record<string, string>;

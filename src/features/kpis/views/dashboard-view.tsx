@@ -1,8 +1,11 @@
 "use client";
 
 import { useT } from "@/shared/i18n";
+import { Button } from "@/shared/ui/button";
 import { useOpenModal } from "@/shared/modal";
 import type { Role } from "@/shared/session";
+import { AppointmentsChart } from "../components/appointments-chart";
+import { VaccineCard } from "../components/vaccine-card";
 
 // TODO: datos reales cuando exista la API
 type Stat = { n: number | null; key: "registered" | "today" | "unread" | "upcoming" | "daysSince" };
@@ -29,7 +32,15 @@ export function DashboardView({ role }: { role: Role }) {
   const t = useT();
   const openModal = useOpenModal();
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
+    <div className="grid gap-4">
+      <nav aria-label={t.kpis.quickActions} className="flex flex-wrap justify-end gap-2">
+        {ACTIONS.map((id) => (
+          <Button key={id} variant="outline" size="lg" onClick={() => openModal(id)}>
+            {t.screens[id]}
+          </Button>
+        ))}
+      </nav>
+      <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
       <div className="grid content-start gap-4">
         <div className="grid gap-4 sm:grid-cols-[repeat(auto-fit,minmax(10rem,1fr))]">
           {STATS[role].map(({ n, key }) => (
@@ -41,23 +52,10 @@ export function DashboardView({ role }: { role: Role }) {
             </div>
           ))}
         </div>
-        <nav aria-label={t.kpis.quickActions} className="grid gap-3">
-          {ACTIONS.map((id) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => openModal(id)}
-              className="rounded-xl bg-white p-5 text-center text-lg uppercase shadow-sm transition-colors hover:bg-vet-lilac/40"
-            >
-              {t.screens[id]}
-            </button>
-          ))}
-        </nav>
+        <AppointmentsChart />
       </div>
-      <section className={card}>
-        <h2 className="text-2xl uppercase">{t.kpis.records}</h2>
-        <p className="mt-2 text-vet-gray">{t.shell.comingSoon}</p>
-      </section>
+      <VaccineCard />
+      </div>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import { useLocale, useT } from "@/shared/i18n";
 // TODO: una feature no importa de otra; mover el esquema de vacunación a shared/
 import { SCHEDULE } from "@/features/kpis";
 import { Input } from "@/shared/ui/input";
-import { PETS, type Pet } from "../mocks";
+import { api, birthDateFromAge, type Pet } from "@/shared/api";
 
 export function PetForm() {
   const t = useT();
@@ -18,34 +18,35 @@ export function PetForm() {
   const router = useRouter();
   const a = t.appointments;
   const [species, setSpecies] = useState<Pet["species"] | "">("");
+  // DESACTIVADO: el backend aún no guarda fotos de mascotas (no hay endpoint). La foto se elige pero no se envía.
   const [photo, setPhoto] = useState<File>();
   const { getRootProps, getInputProps, open, isDragActive } = useFileDrop((f) => setPhoto(f[0]));
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
-    // Fecha vacía = esa dosis no se ha aplicado.
-    const applied: Record<string, string> = {};
     if (!species) return;
-    for (const g of SCHEDULE[species])
-      for (const d of g.doses) {
-        const date = String(f.get(`${g.id}-${d.id}`) ?? "");
-        if (date) applied[`${g.id}-${d.id}`] = date;
-      }
-    // shortcut: solo en memoria (se pierde al recargar), reemplazar por la API; `vaccines` queda vacío
-    PETS.push({
-      id: crypto.randomUUID(),
-      name: String(f.get("name")).trim(),
-      species,
-      sex: f.get("sex") as Pet["sex"],
-      ageYears: Number(f.get("age")),
-      // shortcut: object URL, vive hasta recargar; subir al backend de archivos cuando exista
-      photos: photo ? [URL.createObjectURL(photo)] : [],
-      vaccines: [],
-      applied,
-    });
-    toast.success(t.pets.registered);
-    router.push("/mascotas");
+    try {
+      const { mascota } = await api<{ mascota: { id: string } }>("pets", {
+        method: "POST",
+        body: JSON.stringify({
+          name: String(f.get("name")).trim(),
+          species,
+          sex: f.get("sex"),
+          birthDate: birthDateFromAge(Number(f.get("age"))),
+        }),
+      });
+      // Fecha vacía = esa dosis no se ha aplicado. El nombre de la vacuna es la clave `${grupo}-${dosis}` del esquema.
+      for (const g of SCHEDULE[species])
+        for (const d of g.doses) {
+          const date = String(f.get(`${g.id}-${d.id}`) ?? "");
+          if (date) await api(`pets/${mascota.id}/vaccines`, { method: "POST", body: JSON.stringify({ name: `${g.id}-${d.id}`, date }) });
+        }
+      toast.success(t.pets.registered);
+      router.push("/mascotas");
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   }
 
   return (
@@ -75,11 +76,12 @@ export function PetForm() {
         <Input id="age" name="age" type="number" min={0} max={40} required className={inputClass} />
       </Field>
 
-      <Field id="photo" label={t.pets.photo} className="sm:col-span-2">
-        <div {...getRootProps()} className={`grid min-h-32 place-items-center gap-2 bg-vet-field p-3 ${isDragActive ? "ring-2 ring-vet-lilac" : ""}`}>
-          <input {...getInputProps()} id="photo" />
+      {/* DESACTIVADO: aún no funciona por el backend (sin endpoint para fotos de mascotas). Reactivar y enviar `photo` cuando exista. */}
+      <Field id="photo" label={t.pets.photo} className="pointer-events-none opacity-50 sm:col-span-2">
+        <div {...getRootProps()} aria-disabled className={`grid min-h-32 place-items-center gap-2 bg-vet-field p-3 ${isDragActive ? "ring-2 ring-vet-lilac" : ""}`}>
+          <input {...getInputProps()} id="photo" disabled />
           {photo && <FileThumb file={photo} className="size-24" />}
-          <button type="button" onClick={open} className="flex flex-col items-center gap-1 text-sm text-vet-gray">
+          <button type="button" disabled onClick={open} className="flex flex-col items-center gap-1 text-sm text-vet-gray">
             <Upload className="size-6" />
             {a.uploadImage}
           </button>

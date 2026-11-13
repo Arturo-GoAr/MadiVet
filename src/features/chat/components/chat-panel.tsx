@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Paperclip, Send, X } from "lucide-react";
 import { format, parseISO } from "date-fns";
@@ -9,11 +9,36 @@ import { useT } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
-import { CHATS, type Message } from "../mocks";
+import { api, fetchFile, useApi } from "@/shared/api";
+import { toast } from "sonner";
+
+export type Message = {
+  id: string;
+  from: "me" | "them";
+  text: string;
+  at: string; // yyyy-MM-ddTHH:mm
+  files: { id: string; name: string; type: string; url: string }[];
+};
+
+// Los adjuntos exigen token: se descargan y se pasan como File a los previews existentes.
+function RemoteFile({ f }: { f: Message["files"][number] }) {
+  const [file, setFile] = useState<File>();
+  useEffect(() => {
+    let stale = false;
+    fetchFile(f.url)
+      .then((b) => !stale && setFile(new File([b], f.name, { type: f.type })))
+      .catch(() => {});
+    return () => {
+      stale = true;
+    };
+  }, [f]);
+  return file ? <FilePreview file={file} /> : null;
+}
 
 export function ChatPanel({ appointmentId }: { appointmentId: string }) {
   const t = useT();
-  const [messages, setMessages] = useState<Message[]>(CHATS.find((c) => c.appointmentId === appointmentId)?.messages ?? []);
+  const { data, reload } = useApi<{ mensajes: Message[] }>(`appointments/${appointmentId}/messages`);
+  const messages = useMemo(() => data?.mensajes ?? [], [data]);
   const [draft, setDraft] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const list = useRef<HTMLDivElement>(null);
@@ -26,14 +51,26 @@ export function ChatPanel({ appointmentId }: { appointmentId: string }) {
     list.current?.scrollTo({ top: list.current.scrollHeight });
   }, [messages.length]);
 
-  function send(e: React.FormEvent) {
+  // shortcut: polling cada 10 s en vez de websockets; cambiar si el backend añade tiempo real.
+  useEffect(() => {
+    const id = setInterval(reload, 10_000);
+    return () => clearInterval(id);
+  }, [reload]);
+
+  async function send(e: React.FormEvent) {
     e.preventDefault();
     const text = draft.trim();
     if (!text && !files.length) return;
-    // TODO: enviar al backend cuando exista
-    setMessages((m) => [...m, { id: crypto.randomUUID(), from: "me", text, at: format(new Date(), "yyyy-MM-dd'T'HH:mm"), files }]);
-    setDraft("");
-    setFiles([]);
+    const body = new FormData();
+    body.set("text", text);
+    files.forEach((f) => body.append("files", f));
+    try {
+      await api(`appointments/${appointmentId}/messages`, { method: "POST", body });
+      setDraft("");
+      setFiles([]);
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   }
 
   return (
@@ -47,10 +84,10 @@ export function ChatPanel({ appointmentId }: { appointmentId: string }) {
         {shown.map((m) => (
           <div key={m.id} className={cn("max-w-[80%] rounded-2xl px-4 py-2", m.from === "me" ? "self-end bg-vet-lilac" : "self-start bg-vet-field")}>
             {m.text && <p className="whitespace-pre-wrap break-words">{m.text}</p>}
-            {!!m.files?.length && (
+            {!!m.files.length && (
               <div className="mt-2 flex flex-wrap gap-2">
-                {m.files.map((f, i) => (
-                  <FilePreview key={i} file={f} />
+                {m.files.map((f) => (
+                  <RemoteFile key={f.id} f={f} />
                 ))}
               </div>
             )}

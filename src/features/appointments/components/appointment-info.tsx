@@ -1,10 +1,10 @@
 "use client";
 
-import { notFound } from "next/navigation";
 import { format, parseISO } from "date-fns";
 import { enUS, es } from "date-fns/locale";
 import { useLocale, useT } from "@/shared/i18n";
-import { APPOINTMENTS } from "../mocks";
+import { useAppointment } from "@/shared/api";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 const locales = { es, en: enUS };
 
@@ -12,11 +12,12 @@ export function AppointmentInfo({ id }: { id: string }) {
   const t = useT();
   const a = t.appointments;
   const locale = locales[useLocale()];
-  const appointment = APPOINTMENTS.find((x) => x.id === id);
-  if (!appointment) notFound();
+  const { appointment, error } = useAppointment(id);
+  if (error) return <p className="text-vet-gray">{error.message}</p>;
+  if (!appointment) return <Skeleton className="h-40" />;
 
   const rows = [
-    [t.common.petName, appointment.pet],
+    [t.common.petName, appointment.pet ?? "—"],
     [a.date, format(parseISO(appointment.date), "PPP", { locale })],
     [a.subject, appointment.subject],
   ];

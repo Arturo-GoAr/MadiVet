@@ -5,22 +5,22 @@ import { differenceInCalendarMonths, format, parseISO, startOfMonth, subMonths }
 import { enUS, es } from "date-fns/locale";
 import { useLocale, useT } from "@/shared/i18n";
 import { ChartContainer, ChartTooltip } from "@/shared/ui/chart";
-// TODO: una feature no importa de otra; mover citas a shared/ o a la API
-import { APPOINTMENTS } from "@/features/appointments/mocks";
+import { useAppointments } from "@/shared/api";
 
 const locales = { es, en: enUS };
 const MONTHS = 6;
-const PET_NAMES = [...new Set(APPOINTMENTS.map((a) => a.pet))];
-// TODO: fecha de creación de la cuenta, vendrá de la sesión/API
-const ACCOUNT_CREATED = "2026-07-01";
 
 export function AppointmentsChart({ pet }: { pet?: string }) {
   const t = useT();
   const locale = locales[useLocale()];
-  const list = pet ? APPOINTMENTS.filter((a) => a.pet === pet) : APPOINTMENTS;
+  const { appointments = [] } = useAppointments();
+  const all = appointments.filter((a) => a.pet);
+  const list = pet ? all.filter((a) => a.pet === pet) : all;
+  const petNames = [...new Set(all.map((a) => a.pet))];
   const now = startOfMonth(new Date());
-  // Hasta 6 meses, recortado a los que lleva la cuenta.
-  const n = Math.min(MONTHS, differenceInCalendarMonths(now, parseISO(ACCOUNT_CREATED)) + 1);
+  // Hasta 6 meses, recortado al mes de la cita más antigua (el backend no expone la fecha de alta de la cuenta).
+  const oldest = list.reduce((m, a) => (a.date < m ? a.date : m), format(now, "yyyy-MM-dd"));
+  const n = Math.min(MONTHS, differenceInCalendarMonths(now, parseISO(oldest)) + 1);
   const data = Array.from({ length: n }, (_, k) => {
     const m = subMonths(now, n - 1 - k);
     const key = format(m, "yyyy-MM");
@@ -28,7 +28,7 @@ export function AppointmentsChart({ pet }: { pet?: string }) {
     return {
       month: format(m, "MMM", { locale }),
       count: inMonth.length,
-      pets: (pet ? [pet] : PET_NAMES).map((name) => ({ name, n: inMonth.filter((a) => a.pet === name).length })),
+      pets: (pet ? [pet] : petNames).map((name) => ({ name, n: inMonth.filter((a) => a.pet === name).length })),
     };
   });
 

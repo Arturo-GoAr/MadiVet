@@ -6,19 +6,27 @@ import { useT } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils";
 import { Input } from "@/shared/ui/input";
 import { Textarea } from "@/shared/ui/textarea";
-import { ADOPTABLE } from "../mocks";
+import { api, useApi } from "@/shared/api";
+import type { AdoptablePet } from "../types";
 
 export function AdoptionRequestForm({ onDone, petId }: { onDone: () => void; petId?: string }) {
   const t = useT();
   const a = t.adoption;
+  const { data } = useApi<{ mascotas: AdoptablePet[] }>("adoption/animals");
+  const adoptable = data?.mascotas ?? [];
   // `petId` preselecciona la mascota; un id desconocido se ignora.
-  const defaultPet = ADOPTABLE.some((p) => p.id === petId) ? petId : "";
+  const defaultPet = adoptable.some((p) => p.id === petId) ? petId : "";
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO: conectar con el backend cuando exista
-    toast.success(a.sent);
-    onDone();
+    const f = Object.fromEntries(new FormData(e.currentTarget));
+    try {
+      await api("adoption/requests", { method: "POST", body: JSON.stringify({ ...f, adoptableId: f.adoptable }) });
+      toast.success(a.sent);
+      onDone();
+    } catch (err) {
+      toast.error((err as Error).message);
+    }
   }
 
   return (
@@ -40,7 +48,7 @@ export function AdoptionRequestForm({ onDone, petId }: { onDone: () => void; pet
       </Field>
       <div className="grid content-start gap-4">
         <Field id="adoptable" label={a.pet}>
-          <NativeSelect id="adoptable" defaultValue={defaultPet} options={ADOPTABLE.map((p) => ({ value: p.id, label: p.name }))} />
+          <NativeSelect key={adoptable.length} id="adoptable" defaultValue={defaultPet} options={adoptable.map((p) => ({ value: p.id, label: p.name }))} />
         </Field>
         <SubmitButton />
       </div>

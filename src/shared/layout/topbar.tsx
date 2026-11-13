@@ -3,6 +3,8 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { clearAuth } from "@/shared/session";
 import { LocaleSwitcher, useT } from "@/shared/i18n";
 import { ThemeSwitcher } from "@/shared/i18n/theme-switcher";
 import { Avatar, AvatarFallback } from "@/shared/ui/avatar";
@@ -45,6 +47,7 @@ export const Facebook = () => (
 export function Topbar({ name }: { name: string }) {
   const t = useT();
   const pathname = usePathname();
+  const router = useRouter();
   const screen = screenFor(pathname);
 
   return (
@@ -77,8 +80,12 @@ export function Topbar({ name }: { name: string }) {
             <ThemeSwitcher />
           </div>
           <DropdownMenuSeparator />
-          {/* TODO: cerrar sesión real al conectar el backend de auth */}
-          <DropdownMenuItem render={<Link href="/login" />}>{t.shell.signOut}</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              clearAuth();
+              router.replace("/login");
+            }}
+          >{t.shell.signOut}</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

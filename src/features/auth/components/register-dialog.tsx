@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
+import { api } from "@/shared/api";
 import { Button } from "@/shared/ui/button";
 import {
   Dialog,
@@ -20,7 +21,7 @@ export function RegisterDialog() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     if (data.get("password") !== data.get("confirmPassword")) {
@@ -28,7 +29,15 @@ export function RegisterDialog() {
       return;
     }
     setError(null);
-    // TODO: conectar con el backend cuando exista
+    try {
+      await api("auth/register", {
+        method: "POST",
+        body: JSON.stringify({ nombre: data.get("fullName"), correo: data.get("email"), password: data.get("password") }),
+      });
+    } catch (err) {
+      setError((err as Error).message);
+      return;
+    }
     toast.success(t.auth.accountCreated);
     setOpen(false);
   }

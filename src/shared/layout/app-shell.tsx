@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "@/shared/session";
 import { BottomBar } from "./bottom-bar";
 import { Footer } from "./footer";
@@ -9,6 +11,11 @@ import { Topbar } from "./topbar";
 // Solo <main> hace scroll: topbar, sidebar y bottom bar quedan fijos.
 export function AppShell({ children }: { children: React.ReactNode }) {
   const session = useSession();
+  const router = useRouter();
+  useEffect(() => {
+    if (session === null) router.replace("/login");
+  }, [session, router]);
+  if (!session) return null;
   return (
     <div className="flex h-dvh flex-col bg-vet-surface">
       <Topbar name={session.name} />

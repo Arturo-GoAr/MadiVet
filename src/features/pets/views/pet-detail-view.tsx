@@ -2,24 +2,25 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { notFound } from "next/navigation";
 import { ArrowLeft, ImagePlus } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { useT } from "@/shared/i18n";
 import { PhotoCarousel } from "@/shared/files";
 // TODO: una feature no importa de otra; mover citas y cartilla a shared/
 import { VaccineCard } from "@/features/kpis";
-import { APPOINTMENTS } from "@/features/appointments";
-import { PETS } from "../mocks";
+import { useAppointments, usePet } from "@/shared/api";
+import { Skeleton } from "@/shared/ui/skeleton";
 
 export function PetDetailView({ id }: { id: string }) {
   const t = useT();
   // shortcut: fotos nuevas solo en memoria (se pierden al salir), subir a la API cuando exista
   const [added, setAdded] = useState<string[]>([]);
-  const pet = PETS.find((p) => p.id === id);
-  if (!pet) notFound();
+  const { pet, error } = usePet(id);
+  const { appointments = [] } = useAppointments();
+  if (error) return <p className="text-vet-gray">{error.message}</p>;
+  if (!pet) return <Skeleton className="h-64 rounded-xl" />;
   const photos = [...pet.photos, ...added];
-  const appts = APPOINTMENTS.filter((a) => a.pet === pet.name);
+  const appts = appointments.filter((a) => a.petId === pet.id);
 
   return (
     <div className="grid gap-4">

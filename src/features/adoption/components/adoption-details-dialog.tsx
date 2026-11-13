@@ -3,7 +3,7 @@
 import { useT } from "@/shared/i18n";
 import { useOpenModal } from "@/shared/modal";
 import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
-import type { AdoptablePet } from "../mocks";
+import type { AdoptablePet } from "../types";
 import { PhotoCarousel } from "@/shared/files";
 
 export function AdoptionDetailsDialog({ pet, onClose }: { pet: AdoptablePet | null; onClose: () => void }) {
@@ -19,7 +19,8 @@ export function AdoptionDetailsDialog({ pet, onClose }: { pet: AdoptablePet | nu
     [a.size, a.sizes[pet.size]],
     [a.vaccinated, yesNo(pet.vaccinated)],
     [a.sterilized, yesNo(pet.sterilized)],
-    [a.rescued, yesNo(pet.rescued)],
+    // DESACTIVADO: aún no funciona por el backend (la API de adopción no devuelve `rescued`).
+    // [a.rescued, yesNo(pet.rescued)],
   ];
 
   return (

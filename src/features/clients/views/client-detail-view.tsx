@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useT } from "@/shared/i18n";
-import { CLIENTS } from "../mocks";
+import { useApi } from "@/shared/api";
+import { Skeleton } from "@/shared/ui/skeleton";
+
+type Client = { id: string; nombre: string; telefono: string | null; mascotas: { id: string; nombre: string }[] };
 
 export function ClientDetailView({ id }: { id: string }) {
   const t = useT();
-  const client = CLIENTS.find((c) => c.id === id);
-  if (!client) notFound();
+  const { data, error } = useApi<{ cliente: Client }>(`clients/${id}`);
+  const client = data?.cliente;
 
   return (
     <div className="grid gap-4">
@@ -17,19 +19,24 @@ export function ClientDetailView({ id }: { id: string }) {
         <ArrowLeft className="size-4" />
         {t.screens.clients}
       </Link>
+      {error && <p className="text-vet-gray">{error.message}</p>}
+      {!client ? (
+        !error && <Skeleton className="h-40 rounded-xl" />
+      ) : (
       <section className="rounded-xl bg-card p-5 shadow-sm">
-        <h1 className="text-2xl">{client.name}</h1>
+        <h1 className="text-2xl">{client.nombre}</h1>
         <dl className="mt-4 grid gap-3">
           <div>
             <dt className="text-xs uppercase text-vet-gray">{t.clients.phone}</dt>
-            <dd>{client.phone}</dd>
+            <dd>{client.telefono ?? "—"}</dd>
           </div>
           <div>
             <dt className="text-xs uppercase text-vet-gray">{t.clients.pets}</dt>
-            <dd>{client.pets.join(", ")}</dd>
+            <dd>{client.mascotas.map((m) => m.nombre).join(", ")}</dd>
           </div>
         </dl>
       </section>
+      )}
     </div>
   );
 }

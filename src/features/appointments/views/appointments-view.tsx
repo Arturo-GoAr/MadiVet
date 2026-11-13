@@ -20,7 +20,7 @@ import { enUS, es } from "date-fns/locale";
 import { useLocale, useT } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils";
 import { useOpenModal } from "@/shared/modal";
-import { APPOINTMENTS } from "../mocks";
+import { useAppointments } from "@/shared/api";
 
 const locales = { es, en: enUS };
 const iconLink = "grid size-10 place-items-center rounded-lg text-vet-gray hover:bg-vet-surface hover:text-foreground";
@@ -31,6 +31,7 @@ export function AppointmentsView() {
   const locale = locales[useLocale()];
   const params = useSearchParams();
   const openModal = useOpenModal();
+  const { appointments = [] } = useAppointments();
 
   const view = params.get("vista") === "lista" ? "lista" : "calendario";
   const parsed = parse(params.get("mes") ?? "", "yyyy-MM", new Date());
@@ -44,8 +45,8 @@ export function AppointmentsView() {
   };
   const monthHref = (m: Date) => href({ mes: format(m, "yyyy-MM") });
 
-  const matches = APPOINTMENTS.filter((x) =>
-    `${a.types[x.type]} ${x.pet} ${x.subject}`.toLowerCase().includes(q),
+  const matches = appointments.filter((x) =>
+    `${a.types[x.type]} ${x.pet ?? ""} ${x.subject}`.toLowerCase().includes(q),
   );
   const days = eachDayOfInterval({
     start: startOfWeek(month, { weekStartsOn: 1 }),
@@ -142,7 +143,7 @@ export function AppointmentsView() {
                 <span className="w-16 text-sm uppercase text-vet-gray">{format(parseISO(x.date), "d MMM", { locale })}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate">
-                    {x.pet} · {a.types[x.type]}
+                    {x.pet ?? "—"} · {a.types[x.type]}
                   </span>
                   <span className="block truncate text-sm text-vet-gray">{x.subject}</span>
                 </span>

@@ -5,14 +5,16 @@ import { useSearchParams } from "next/navigation";
 import { useT } from "@/shared/i18n";
 import { useOpenModal } from "@/shared/modal";
 import { AdoptionDetailsDialog } from "../components/adoption-details-dialog";
-import { ADOPTABLE, type AdoptablePet } from "../mocks";
+import { useApi } from "@/shared/api";
+import type { AdoptablePet } from "../types";
 
 export function AdoptionView() {
   const t = useT();
   const openModal = useOpenModal();
   const q = (useSearchParams().get("q") ?? "").toLowerCase();
   const [selected, setSelected] = useState<AdoptablePet | null>(null);
-  const pets = ADOPTABLE.filter((p) => `${p.name} ${p.breed} ${p.description}`.toLowerCase().includes(q));
+  const { data } = useApi<{ mascotas: AdoptablePet[] }>("adoption/animals");
+  const pets = (data?.mascotas ?? []).filter((p) => `${p.name} ${p.breed} ${p.description}`.toLowerCase().includes(q));
 
   return (
     <div className="grid gap-4">

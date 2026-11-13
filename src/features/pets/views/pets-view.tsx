@@ -4,12 +4,13 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Plus } from "lucide-react";
 import { useT } from "@/shared/i18n";
-import { PETS } from "../mocks";
+import { usePets } from "@/shared/api";
 
 export function PetsView() {
   const t = useT();
   const q = (useSearchParams().get("q") ?? "").toLowerCase();
-  const pets = PETS.filter((p) => p.name.toLowerCase().includes(q));
+  const { pets: all = [] } = usePets();
+  const pets = all.filter((p) => p.name.toLowerCase().includes(q));
 
   return (
     <div className="grid gap-4">

@@ -3,13 +3,16 @@
 import { useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { useT } from "@/shared/i18n";
-import { TIPS } from "../mocks";
+import { useApi } from "@/shared/api";
+
+type Tip = { id: string; title: string; body: string };
 
 // Acordeón con <details>: teclado, lector de pantalla y estado abierto vienen nativos.
 export function RecommendationsView() {
   const t = useT();
   const q = (useSearchParams().get("q") ?? "").toLowerCase();
-  const tips = TIPS.filter((x) => `${x.title} ${x.body}`.toLowerCase().includes(q));
+  const { data } = useApi<{ recomendaciones: Tip[] }>("recommendations");
+  const tips = (data?.recomendaciones ?? []).filter((x) => `${x.title} ${x.body}`.toLowerCase().includes(q));
 
   if (tips.length === 0) return <p className="rounded-xl bg-card p-6 text-center text-vet-gray shadow-sm">{t.tips.empty}</p>;
 

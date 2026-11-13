@@ -4,7 +4,7 @@ import { LocaleSwitcher, useT } from "@/shared/i18n";
 import { useSession } from "@/shared/session";
 
 export function SettingsView() {
-  const { name, role } = useSession();
+  const { name, role } = useSession()!; // AppShell no renderiza sin sesión
   const t = useT();
   const rows = [
     [t.settings.name, name],

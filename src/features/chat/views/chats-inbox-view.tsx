@@ -10,7 +10,9 @@ import { useOpenModal } from "@/shared/modal";
 import { cn } from "@/shared/lib/utils";
 import { Badge } from "@/shared/ui/badge";
 import { ChatPanel } from "../components/chat-panel";
-import { CHATS } from "../mocks";
+import { useApi } from "@/shared/api";
+
+type Chat = { appointmentId: string; title: string; unread: number; lastMessage: string | null; lastAt: string | null };
 
 const locales = { es, en: enUS };
 
@@ -21,9 +23,10 @@ export function ChatsInboxView() {
   const [sel, setSel] = useState<string | null>(null);
   const q = (useSearchParams().get("q") ?? "").toLowerCase();
 
-  const rows = CHATS.map((c) => ({ ...c, last: c.messages.at(-1) }))
-    .filter((c) => `${c.title} ${c.last?.text ?? ""}`.toLowerCase().includes(q))
-    .sort((a, b) => (b.last?.at ?? "").localeCompare(a.last?.at ?? ""));
+  const { data } = useApi<{ chats: Chat[] }>("chats");
+  const rows = (data?.chats ?? [])
+    .filter((c) => `${c.title} ${c.lastMessage ?? ""}`.toLowerCase().includes(q))
+    .sort((a, b) => (b.lastAt ?? "").localeCompare(a.lastAt ?? ""));
 
   if (rows.length === 0) return <p className="rounded-xl bg-card p-6 text-center text-vet-gray shadow-sm">{t.chat.inboxEmpty}</p>;
 
@@ -41,9 +44,9 @@ export function ChatsInboxView() {
             >
               <span className="min-w-0 flex-1">
                 <span className="block truncate">{c.title}</span>
-                <span className="block truncate text-sm text-vet-gray">{c.last?.text ?? t.chat.empty}</span>
+                <span className="block truncate text-sm text-vet-gray">{c.lastMessage ?? t.chat.empty}</span>
               </span>
-              {c.last && <span className="text-xs text-vet-gray">{format(parseISO(c.last.at), "d MMM", { locale })}</span>}
+              {c.lastAt && <span className="text-xs text-vet-gray">{format(parseISO(c.lastAt), "d MMM", { locale })}</span>}
               {c.unread > 0 && (
                 <Badge aria-label={`${c.unread} ${t.chat.unread}`} className="bg-vet-teal text-white">
                   {c.unread}

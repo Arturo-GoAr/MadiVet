@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LocaleSwitcher, useT } from "@/shared/i18n";
+import { ThemeSwitcher } from "@/shared/i18n/theme-switcher";
 import { Avatar, AvatarFallback } from "@/shared/ui/avatar";
 import {
   DropdownMenu,
@@ -47,7 +48,7 @@ export function Topbar({ name }: { name: string }) {
   const screen = screenFor(pathname);
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-3 bg-white px-4 md:h-20 md:px-6">
+    <header className="flex h-16 shrink-0 items-center gap-3 bg-card px-4 md:h-20 md:px-6">
       <Link href="/dashboard" className="hidden font-baloo text-2xl leading-none sm:block md:text-4xl" aria-label="VetMadi">
         <span className="text-vet-teal">VET</span>
         <span className="text-vet-red">MADI</span>
@@ -71,6 +72,9 @@ export function Topbar({ name }: { name: string }) {
           <DropdownMenuItem render={<Link href="/ajustes" />}>{t.shell.profile}</DropdownMenuItem>
           <div className="px-1.5 py-1">
             <LocaleSwitcher />
+          </div>
+          <div className="px-1.5 py-1">
+            <ThemeSwitcher />
           </div>
           <DropdownMenuSeparator />
           {/* TODO: cerrar sesión real al conectar el backend de auth */}

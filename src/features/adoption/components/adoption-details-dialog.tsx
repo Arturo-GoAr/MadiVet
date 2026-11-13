@@ -4,7 +4,7 @@ import { useT } from "@/shared/i18n";
 import { useOpenModal } from "@/shared/modal";
 import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import type { AdoptablePet } from "../mocks";
-import { PhotoCarousel } from "./photo-carousel";
+import { PhotoCarousel } from "@/shared/files";
 
 export function AdoptionDetailsDialog({ pet, onClose }: { pet: AdoptablePet | null; onClose: () => void }) {
   const t = useT();

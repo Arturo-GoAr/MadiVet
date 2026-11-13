@@ -42,9 +42,9 @@ export function RegisterDialog() {
       >
         {t.auth.signUp}
       </DialogTrigger>
-      <DialogContent className="max-w-[535px] gap-0 rounded-2xl bg-white px-[44px] py-[40px] ring-0 shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:max-w-[535px]">
+      <DialogContent className="max-w-[535px] gap-0 rounded-2xl bg-card px-[44px] py-[40px] ring-0 shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:max-w-[535px]">
         <DialogHeader className="items-center">
-          <DialogTitle className="font-arvo text-[48px] font-normal leading-tight text-black">
+          <DialogTitle className="font-arvo text-[48px] font-normal leading-tight text-foreground">
             {t.auth.registerTitle}
           </DialogTitle>
         </DialogHeader>

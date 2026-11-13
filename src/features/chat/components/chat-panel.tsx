@@ -39,7 +39,7 @@ export function ChatPanel({ appointmentId }: { appointmentId: string }) {
   return (
     <div
       {...getRootProps()}
-      className={cn("flex h-[70dvh] min-h-96 flex-col rounded-xl bg-white shadow-sm", isDragActive && "ring-2 ring-vet-lilac")}
+      className={cn("flex h-[70dvh] min-h-96 flex-col rounded-xl bg-card shadow-sm", isDragActive && "ring-2 ring-vet-lilac")}
     >
       <input {...getInputProps()} />
       <div ref={list} className="flex flex-1 flex-col gap-3 overflow-y-auto p-4" aria-live="polite">

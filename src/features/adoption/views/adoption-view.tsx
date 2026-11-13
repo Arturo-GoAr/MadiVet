@@ -24,11 +24,11 @@ export function AdoptionView() {
         {t.screens.adoptionRequest}
       </button>
       {pets.length === 0 ? (
-        <p className="rounded-xl bg-white p-6 text-center text-vet-gray shadow-sm">{t.adoption.empty}</p>
+        <p className="rounded-xl bg-card p-6 text-center text-vet-gray shadow-sm">{t.adoption.empty}</p>
       ) : (
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-4">
           {pets.map((p) => (
-            <li key={p.id} className="overflow-hidden rounded-xl bg-white shadow-sm">
+            <li key={p.id} className="overflow-hidden rounded-xl bg-card shadow-sm">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={p.photos[0]} alt={p.name} className="aspect-[4/3] w-full object-cover" />
               <div className="p-4">
@@ -39,7 +39,7 @@ export function AdoptionView() {
                 <button
                   type="button"
                   onClick={() => setSelected(p)}
-                  className="mt-3 w-full rounded bg-vet-field px-3 py-2 text-vet-gray transition-colors hover:bg-vet-lilac/40 hover:text-black"
+                  className="mt-3 w-full rounded bg-vet-field px-3 py-2 text-vet-gray transition-colors hover:bg-vet-lilac/40 hover:text-foreground"
                 >
                   {t.adoption.viewDetails}
                 </button>

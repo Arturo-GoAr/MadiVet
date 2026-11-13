@@ -13,11 +13,11 @@ export function ClientDetailView({ id }: { id: string }) {
 
   return (
     <div className="grid gap-4">
-      <Link href="/clientes" className="flex w-fit items-center gap-1.5 text-sm text-vet-gray hover:text-black">
+      <Link href="/clientes" className="flex w-fit items-center gap-1.5 text-sm text-vet-gray hover:text-foreground">
         <ArrowLeft className="size-4" />
         {t.screens.clients}
       </Link>
-      <section className="rounded-xl bg-white p-5 shadow-sm">
+      <section className="rounded-xl bg-card p-5 shadow-sm">
         <h1 className="text-2xl">{client.name}</h1>
         <dl className="mt-4 grid gap-3">
           <div>

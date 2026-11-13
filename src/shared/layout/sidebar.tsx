@@ -15,7 +15,7 @@ export function Sidebar({ role }: { role: Role }) {
   return (
     <nav
       aria-label={t.shell.mainNav}
-      className="hidden w-[4.5rem] shrink-0 flex-col items-center gap-3 bg-white py-2 md:flex"
+      className="hidden w-[4.5rem] shrink-0 flex-col items-center gap-3 bg-card py-2 md:flex"
     >
       {navFor(role).map(({ href, icon: Icon, label, bottom }) => {
         const active = isActive(pathname, href);
@@ -29,8 +29,8 @@ export function Sidebar({ role }: { role: Role }) {
                   aria-label={text}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "grid size-12 place-items-center rounded-2xl bg-vet-surface text-vet-gray transition-colors hover:bg-vet-lilac/50 hover:text-black",
-                    active && "bg-vet-lilac text-black",
+                    "grid size-12 place-items-center rounded-2xl bg-vet-surface text-vet-gray transition-colors hover:bg-vet-lilac/50 hover:text-foreground",
+                    active && "bg-vet-lilac text-foreground",
                     bottom && "mt-auto",
                   )}
                 />

@@ -7,11 +7,13 @@ export type Pet = {
   species: "dog" | "cat";
   sex: "male" | "female";
   ageYears: number;
-  photo?: string; // URL de la foto
+  photos: string[]; // la última es la más reciente
   vaccines: Vaccine[];
   // Fecha de aplicación por `${grupo}-${dosis}` del esquema de features/kpis/schedule.ts. TODO: unificar con `vaccines` al llegar la API.
   applied: Record<string, string>;
 };
+
+const PHOTOS = [1, 2, 3].map((n) => `/images/adoption/placeholder-${n}.svg`); // relleno
 
 export const PETS: Pet[] = [
   {
@@ -20,6 +22,7 @@ export const PETS: Pet[] = [
     species: "dog",
     sex: "male",
     ageYears: 3,
+    photos: PHOTOS,
     vaccines: [
       { name: "Rabia", date: "2026-02-10", next: "2027-02-10" },
       { name: "Parvovirus", date: "2026-02-10", next: "2027-02-10" },
@@ -37,6 +40,7 @@ export const PETS: Pet[] = [
     species: "cat",
     sex: "female",
     ageYears: 5,
+    photos: PHOTOS,
     vaccines: [{ name: "Triple felina", date: "2025-11-19", next: "2026-11-19" }],
     applied: {
       "triple-1": "2021-03-10", "triple-2": "2021-04-07", "triple-3": "2021-05-05", "triple-b": "2025-11-19",

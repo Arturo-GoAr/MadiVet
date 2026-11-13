@@ -23,7 +23,7 @@ import { useOpenModal } from "@/shared/modal";
 import { APPOINTMENTS } from "../mocks";
 
 const locales = { es, en: enUS };
-const iconLink = "grid size-10 place-items-center rounded-lg text-vet-gray hover:bg-vet-surface hover:text-black";
+const iconLink = "grid size-10 place-items-center rounded-lg text-vet-gray hover:bg-vet-surface hover:text-foreground";
 
 export function AppointmentsView() {
   const t = useT();
@@ -58,12 +58,12 @@ export function AppointmentsView() {
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-4">
-        <div className="flex rounded-xl bg-white p-1 shadow-sm">
+        <div className="flex rounded-xl bg-card p-1 shadow-sm">
           <Link
             href={href({ vista: "calendario" })}
             aria-label={a.viewCalendar}
             aria-current={view === "calendario" ? "page" : undefined}
-            className={cn(iconLink, view === "calendario" && "bg-vet-surface text-black")}
+            className={cn(iconLink, view === "calendario" && "bg-vet-surface text-foreground")}
           >
             <CalendarDays className="size-5" />
           </Link>
@@ -71,7 +71,7 @@ export function AppointmentsView() {
             href={href({ vista: "lista" })}
             aria-label={a.viewList}
             aria-current={view === "lista" ? "page" : undefined}
-            className={cn(iconLink, view === "lista" && "bg-vet-surface text-black")}
+            className={cn(iconLink, view === "lista" && "bg-vet-surface text-foreground")}
           >
             <List className="size-5" />
           </Link>
@@ -96,7 +96,7 @@ export function AppointmentsView() {
       </div>
 
       {view === "calendario" ? (
-        <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+        <div className="overflow-hidden rounded-xl bg-card shadow-sm">
           <div className="grid grid-cols-7 border-b text-center text-sm uppercase">
             {days.slice(0, 7).map((d) => (
               <div key={d.getDay()} className="py-2">
@@ -133,9 +133,9 @@ export function AppointmentsView() {
           </div>
         </div>
       ) : inMonth.length === 0 ? (
-        <p className="rounded-xl bg-white p-6 text-center text-vet-gray shadow-sm">{a.noResults}</p>
+        <p className="rounded-xl bg-card p-6 text-center text-vet-gray shadow-sm">{a.noResults}</p>
       ) : (
-        <ul className="divide-y rounded-xl bg-white shadow-sm">
+        <ul className="divide-y rounded-xl bg-card shadow-sm">
           {inMonth.map((x) => (
             <li key={x.id}>
               <Link href={`/citas/${x.id}`} className="flex items-center gap-4 p-4 hover:bg-vet-surface">

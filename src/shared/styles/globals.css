@@ -11,9 +11,9 @@
   --font-mono: var(--font-geist-mono);
   --font-arvo: var(--next-arvo), serif;
   --font-baloo: var(--next-baloo), sans-serif;
-  --color-vet-surface: #f2f2f7;
+  --color-vet-surface: var(--vet-surface);
   --color-vet-gray: #8e8e93;
-  --color-vet-field: #f5f5f5;
+  --color-vet-field: var(--vet-field);
   --color-vet-lilac: #d0bcff;
   --color-vet-link: #0088ff;
   --color-vet-teal: #4fb8c6;
@@ -58,6 +58,8 @@
 }
 
 :root {
+  --vet-surface: #f2f2f7;
+  --vet-field: #f5f5f5;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -93,6 +95,8 @@
 }
 
 .dark {
+  --vet-surface: #1c1c1e;
+  --vet-field: #2c2c2e;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

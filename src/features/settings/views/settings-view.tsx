@@ -12,7 +12,7 @@ export function SettingsView() {
   ];
 
   return (
-    <section className="max-w-xl rounded-xl bg-white p-5 shadow-sm">
+    <section className="max-w-xl rounded-xl bg-card p-5 shadow-sm">
       <h1 className="text-2xl">{t.screens.settings}</h1>
       <dl className="mt-4 grid gap-3">
         {rows.map(([label, value]) => (

@@ -33,7 +33,7 @@ export function AppointmentsChart({ pet }: { pet?: string }) {
   });
 
   return (
-    <section className="flex flex-col rounded-xl bg-white p-5 shadow-sm">
+    <section className="flex flex-col rounded-xl bg-card p-5 shadow-sm">
       <h2 className="text-lg uppercase">{t.kpis.appointmentsByMonth}</h2>
       <ChartContainer config={{ count: { label: t.kpis.appointmentsLabel, color: "var(--color-vet-lilac)" } }} className="mt-3 aspect-auto min-h-48 w-full flex-1">
         <LineChart data={data}>

@@ -5,7 +5,7 @@ import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Label } from "@/shared/ui/label";
 
-export const fieldClass = "w-full rounded-none border-0 bg-vet-field px-2 text-base text-black placeholder:text-vet-gray";
+export const fieldClass = "w-full rounded-none border-0 bg-vet-field px-2 text-base text-foreground placeholder:text-vet-gray";
 export const inputClass = `${fieldClass} h-10`;
 
 export function Field({ id, label, className, children }: { id: string; label: string; className?: string; children: React.ReactNode }) {

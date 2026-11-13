@@ -40,7 +40,7 @@ export function PetForm() {
       sex: f.get("sex") as Pet["sex"],
       ageYears: Number(f.get("age")),
       // shortcut: object URL, vive hasta recargar; subir al backend de archivos cuando exista
-      photo: photo && URL.createObjectURL(photo),
+      photos: photo ? [URL.createObjectURL(photo)] : [],
       vaccines: [],
       applied,
     });
@@ -49,7 +49,7 @@ export function PetForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 rounded-xl bg-white p-6 shadow-sm sm:grid-cols-2">
+    <form onSubmit={onSubmit} className="grid gap-4 rounded-xl bg-card p-6 shadow-sm sm:grid-cols-2">
       <Field id="name" label={t.common.petName} className="sm:col-span-2">
         <Input id="name" name="name" required className={inputClass} />
       </Field>

@@ -23,7 +23,7 @@ export function VaccineCard({ fixed }: { fixed?: Pet }) {
   const day = (d: string) => format(parseISO(d), "P", { locale });
 
   return (
-    <section className="rounded-xl bg-white p-5 shadow-sm">
+    <section className="rounded-xl bg-card p-5 shadow-sm">
       <h2 className="text-2xl uppercase">{t.kpis.records}</h2>
       <div className="mt-3 flex items-center justify-between">
         <button type="button" aria-label={t.kpis.prevPet} hidden={!!fixed} disabled={i === 0} onClick={() => setI(i - 1)} className={arrow}>
@@ -52,7 +52,7 @@ export function VaccineCard({ fixed }: { fixed?: Pet }) {
           <tbody>
             {SCHEDULE[pet.species].map((g) =>
               g.doses.map((d, k) => (
-                <tr key={`${g.id}-${d.id}`} className="border-t border-white">
+                <tr key={`${g.id}-${d.id}`} className="border-t border-card">
                   {k === 0 && (
                     <>
                       <th rowSpan={g.doses.length} className={cn("p-1.5 font-normal", g.color)}>{g.name[lang]}</th>

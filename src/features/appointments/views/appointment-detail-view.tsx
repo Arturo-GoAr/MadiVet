@@ -11,12 +11,12 @@ export function AppointmentDetailView({ id, chat }: { id: string; chat: React.Re
 
   return (
     <div className="grid gap-4">
-      <Link href="/citas" className="flex w-fit items-center gap-1.5 text-sm text-vet-gray hover:text-black">
+      <Link href="/citas" className="flex w-fit items-center gap-1.5 text-sm text-vet-gray hover:text-foreground">
         <ArrowLeft className="size-4" />
         {t.screens.appointments}
       </Link>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
-        <section className="content-start rounded-xl bg-white p-5 shadow-sm">
+        <section className="content-start rounded-xl bg-card p-5 shadow-sm">
           <AppointmentInfo id={id} />
         </section>
         {chat}

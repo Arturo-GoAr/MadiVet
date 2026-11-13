@@ -25,13 +25,13 @@ export function ChatsInboxView() {
     .filter((c) => `${c.title} ${c.last?.text ?? ""}`.toLowerCase().includes(q))
     .sort((a, b) => (b.last?.at ?? "").localeCompare(a.last?.at ?? ""));
 
-  if (rows.length === 0) return <p className="rounded-xl bg-white p-6 text-center text-vet-gray shadow-sm">{t.chat.inboxEmpty}</p>;
+  if (rows.length === 0) return <p className="rounded-xl bg-card p-6 text-center text-vet-gray shadow-sm">{t.chat.inboxEmpty}</p>;
 
   const current = rows.find((c) => c.appointmentId === sel);
 
   return (
     <div className="grid gap-4 lg:grid-cols-[22rem_1fr]">
-      <ul className={cn("h-fit divide-y rounded-xl bg-white shadow-sm", current && "hidden lg:block")}>
+      <ul className={cn("h-fit divide-y rounded-xl bg-card shadow-sm", current && "hidden lg:block")}>
         {rows.map((c) => (
           <li key={c.appointmentId}>
             <button
@@ -69,7 +69,7 @@ export function ChatsInboxView() {
             <ChatPanel key={current.appointmentId} appointmentId={current.appointmentId} />
           </>
         ) : (
-          <p className="grid h-[70dvh] place-items-center rounded-xl bg-white text-vet-gray shadow-sm">{t.chat.selectChat}</p>
+          <p className="grid h-[70dvh] place-items-center rounded-xl bg-card text-vet-gray shadow-sm">{t.chat.selectChat}</p>
         )}
       </div>
     </div>

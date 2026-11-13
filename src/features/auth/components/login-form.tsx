@@ -11,9 +11,9 @@ import { fieldClass, labelClass, primaryButtonClass } from "./field-styles";
 export function LoginForm() {
   const t = useT();
   return (
-    <section className="flex min-h-[714px] w-full max-w-[558px] flex-col rounded-2xl bg-white px-[43px] pt-[40px] pb-[46px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+    <section className="flex min-h-[714px] w-full max-w-[558px] flex-col rounded-2xl bg-card px-[43px] pt-[40px] pb-[46px] shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
       <header className="text-center">
-        <h1 className="font-baloo text-[72px] leading-[1.1] text-black">
+        <h1 className="font-baloo text-[72px] leading-[1.1] text-foreground">
           VETMADI
         </h1>
         <p className="-mt-3 text-[32px] text-vet-gray">{t.auth.loginTitle}</p>

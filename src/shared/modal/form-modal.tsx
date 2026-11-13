@@ -16,7 +16,7 @@ export function FormModal({
   const t = useT();
   return (
     <Dialog open onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-h-[90dvh] gap-6 overflow-y-auto rounded-2xl bg-white p-8 ring-0 shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:max-w-xl">
+      <DialogContent className="max-h-[90dvh] gap-6 overflow-y-auto rounded-2xl bg-card p-8 ring-0 shadow-[0_4px_4px_rgba(0,0,0,0.25)] sm:max-w-xl">
         <DialogHeader className="items-center">
           <DialogTitle className="font-arvo text-3xl font-normal uppercase">{t.screens[title]}</DialogTitle>
         </DialogHeader>

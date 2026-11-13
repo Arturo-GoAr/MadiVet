@@ -17,7 +17,7 @@ const yearly: L = { es: "Cada año", en: "Yearly" };
 const rabies: Group = {
   id: "rabies",
   name: { es: "Rabia", en: "Rabies" },
-  color: "bg-red-100",
+  color: "bg-red-100 dark:bg-red-900/50",
   diseases: { es: "Rabia", en: "Rabies" },
   doses: [
     { id: "1", dose: first, age: weeks("12") },
@@ -28,7 +28,7 @@ const rabies: Group = {
 const deworming: Group = {
   id: "deworming",
   name: { es: "Desparasitación", en: "Deworming" },
-  color: "bg-yellow-100",
+  color: "bg-yellow-100 dark:bg-yellow-900/50",
   diseases: { es: "Parásitos internos y externos", en: "Internal and external parasites" },
   doses: [
     { id: "1", dose: first, age: weeks("4") },
@@ -39,7 +39,7 @@ const deworming: Group = {
 const neutering: Group = {
   id: "neutering",
   name: { es: "Esterilización", en: "Sterilization" },
-  color: "bg-purple-100",
+  color: "bg-purple-100 dark:bg-purple-900/50",
   diseases: { es: "Procedimiento quirúrgico", en: "Surgical procedure" },
   doses: [{ id: "1", dose: single, age: { es: "6 meses", en: "6 months" } }],
 };
@@ -49,7 +49,7 @@ export const SCHEDULE: Record<"dog" | "cat", Group[]> = {
     {
       id: "dhppi",
       name: { es: "Séxtuple", en: "DHPPi + L" },
-      color: "bg-green-100",
+      color: "bg-green-100 dark:bg-green-900/50",
       diseases: {
         es: "Moquillo, hepatitis, parvovirus, parainfluenza, leptospirosis",
         en: "Distemper, hepatitis, parvovirus, parainfluenza, leptospirosis",
@@ -64,7 +64,7 @@ export const SCHEDULE: Record<"dog" | "cat", Group[]> = {
     {
       id: "bordetella",
       name: { es: "Bordetella", en: "Bordetella" },
-      color: "bg-blue-100",
+      color: "bg-blue-100 dark:bg-blue-900/50",
       diseases: { es: "Tos de las perreras", en: "Kennel cough" },
       doses: [
         { id: "1", dose: first, age: weeks("8") },
@@ -79,7 +79,7 @@ export const SCHEDULE: Record<"dog" | "cat", Group[]> = {
     {
       id: "triple",
       name: { es: "Triple felina", en: "FVRCP" },
-      color: "bg-green-100",
+      color: "bg-green-100 dark:bg-green-900/50",
       diseases: {
         es: "Rinotraqueítis, calicivirus, panleucopenia",
         en: "Rhinotracheitis, calicivirus, panleukopenia",
@@ -94,7 +94,7 @@ export const SCHEDULE: Record<"dog" | "cat", Group[]> = {
     {
       id: "felv",
       name: { es: "Leucemia felina", en: "FeLV" },
-      color: "bg-blue-100",
+      color: "bg-blue-100 dark:bg-blue-900/50",
       diseases: { es: "Leucemia felina", en: "Feline leukemia" },
       doses: [
         { id: "1", dose: first, age: weeks("9") },

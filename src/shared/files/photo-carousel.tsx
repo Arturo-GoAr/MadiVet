@@ -3,14 +3,16 @@
 import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useT } from "@/shared/i18n";
+import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 
-const nav = "absolute top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow disabled:opacity-40";
+const nav = "absolute top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-card/90 shadow disabled:opacity-40";
 
 // Carrusel con scroll-snap (flechas del teclado y gesto táctil funcionan nativos) y botones.
 export function PhotoCarousel({ photos, alt }: { photos: string[]; alt: string }) {
   const t = useT();
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
+  const [zoom, setZoom] = useState<number>();
   const go = (dir: number) => track.current?.scrollBy({ left: dir * track.current.clientWidth, behavior: "smooth" });
 
   return (
@@ -25,8 +27,10 @@ export function PhotoCarousel({ photos, alt }: { photos: string[]; alt: string }
         className="flex snap-x snap-mandatory overflow-x-auto rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-vet-lilac [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
       >
         {photos.map((src, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img key={i} src={src} alt={`${alt} ${i + 1}/${photos.length}`} className="aspect-[4/3] w-full shrink-0 snap-center object-cover" />
+          <button key={i} type="button" onClick={() => setZoom(i)} className="w-full shrink-0 cursor-zoom-in snap-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={src} alt={`${alt} ${i + 1}/${photos.length}`} className="aspect-[4/3] w-full object-cover" />
+          </button>
         ))}
       </div>
       {photos.length > 1 && (
@@ -42,6 +46,15 @@ export function PhotoCarousel({ photos, alt }: { photos: string[]; alt: string }
           </p>
         </>
       )}
+      <Dialog open={zoom !== undefined} onOpenChange={(open) => !open && setZoom(undefined)}>
+        <DialogContent className="max-h-[90dvh] sm:max-w-4xl">
+          <DialogTitle className="sr-only">{alt}</DialogTitle>
+          {zoom !== undefined && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={photos[zoom]} alt={alt} className="max-h-[80dvh] w-full rounded-lg object-contain" />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

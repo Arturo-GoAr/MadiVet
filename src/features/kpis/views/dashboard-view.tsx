@@ -29,7 +29,7 @@ const STATS: Record<Role, Stat[]> = {
 
 const ACTIONS = ["newAppointment", "adoptionRequest", "newGrooming"] as const;
 
-const card = "rounded-xl bg-white p-5 shadow-sm";
+const card = "rounded-xl bg-card p-5 shadow-sm";
 
 export function DashboardView() {
   const { role } = useSession();

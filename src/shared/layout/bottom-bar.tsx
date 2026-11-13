@@ -18,7 +18,7 @@ export function BottomBar({ role }: { role: Role }) {
   const more = items.filter((i) => !i.bar);
 
   return (
-    <nav aria-label={t.shell.mainNav} className="flex border-t bg-white md:hidden">
+    <nav aria-label={t.shell.mainNav} className="flex border-t bg-card md:hidden">
       {items
         .filter((i) => i.bar)
         .map(({ href, icon: Icon, label }) => (
@@ -26,7 +26,7 @@ export function BottomBar({ role }: { role: Role }) {
             key={href}
             href={href}
             aria-current={isActive(pathname, href) ? "page" : undefined}
-            className={cn(tab, isActive(pathname, href) && "font-bold text-black")}
+            className={cn(tab, isActive(pathname, href) && "font-bold text-foreground")}
           >
             <Icon className="size-6" />
             {t.screens[label]}
